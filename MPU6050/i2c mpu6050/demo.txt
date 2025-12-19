@@ -1,0 +1,37 @@
+#include "mpu6050.h"
+
+      mpu6050_data = MPU6050_Read();
+      MPU6050_Physic_Data physic_data = MPU6050_Read_Physic(); // 物理单位值
+      char buf[32];
+      //显示mpu6050数据
+      point.x = 13;
+      point.y = 50;
+      float temperature = (mpu6050_data.temp / 340.0f) + 36.53f;
+      snprintf(buf, sizeof(buf), "temp:%.1fc ", temperature);
+      lcd_ascii(&point, buf, 16, BLACK);
+      //显示加 ? 度 accX,accY,accZ 角 ? 度 gyroXYZ
+        // 显示加速度（物理单位：m/s²，保留1位小数）
+      point.y += 16;
+      snprintf(buf, sizeof(buf), "accX:%.1f ms ", physic_data.accel_x);
+      lcd_ascii(&point, buf, 16, BLACK);
+      
+      point.y += 16;
+      snprintf(buf, sizeof(buf), "accY:%.1f ms ", physic_data.accel_y);
+      lcd_ascii(&point, buf, 16, BLACK);
+      
+      point.y += 16;
+      snprintf(buf, sizeof(buf), "accZ:%.1f ms ", physic_data.accel_z);
+      lcd_ascii(&point, buf, 16, BLACK);
+      
+      // 显示陀螺仪（物理单位：°/s，保留1位小数）
+      point.y += 16;
+      snprintf(buf, sizeof(buf), "gyroX:%.1f . ", physic_data.gyro_x);
+      lcd_ascii(&point, buf, 16, BLACK);
+      
+      point.y += 16;
+      snprintf(buf, sizeof(buf), "gyroY:%.1f . ", physic_data.gyro_y);
+      lcd_ascii(&point, buf, 16, BLACK);
+      
+      point.y += 16;
+      snprintf(buf, sizeof(buf), "gyroZ:%.1f . ", physic_data.gyro_z);
+      lcd_ascii(&point, buf, 16, BLACK);
