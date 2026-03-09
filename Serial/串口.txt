@@ -1,0 +1,28 @@
+void printf_uart1(const char *format, ...){
+  char buf[128] = {0};
+  va_list args;
+  
+  va_start(args, format);
+  vsnprintf(buf,128-1,format, args);
+  va_end(args);
+  
+  HAL_UART_Transmit(&huart1, (uint8_t*)buf, strlen(buf), 1000);
+}
+
+//标准重定向
+#ifdef __GNUC__
+// GCC编译器重定向fputc
+int fputc(int ch, FILE *f)
+{
+    // 发送单个字符，超时100ms
+    HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 100);
+    return ch;
+}
+#else
+// MDK/Keil编译器重定向fputc
+int fputc(int ch, FILE *f)
+{
+    HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 100);
+    return ch;
+}
+#endif
